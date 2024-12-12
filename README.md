@@ -1,3 +1,4 @@
-# A GoogleDrive Manager Telegram bot.
+# Телеграм-бот "Google Drive Manager".
 
-That's just a "Hello World" version :D
+> Проект, разработанный в рамках курсовой работый.
+Google Drive Manager – это удобный и быстрый инструмент для менеджента файлов на Google Drive на основе телеграм-бота.

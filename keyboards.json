@@ -1,0 +1,35 @@
+{
+    "main": [
+        {
+            "text": "Скачать файл",
+            "path": "to_download"
+        },
+        {
+            "text": "Загрузить файл",
+            "path": "to_upload"
+        },
+        {
+            "text": "Файл в корзину",
+            "path": "to_trash" 
+        },
+        {
+            "text": "Удалить файл",
+            "path": "to_delete"
+        },
+        {
+            "text": "Обо мне",
+            "path": "to_about"
+        },
+        {
+            "text": "Ссылка на файл",
+            "path": "to_view"
+        }
+    ],
+
+    "back": [
+        {
+            "text": "Назад",
+            "path": "to_main"
+        }
+    ]
+}

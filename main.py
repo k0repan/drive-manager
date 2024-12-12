@@ -1,45 +1,30 @@
-import os.path
+import logging
+import asyncio
+import sys
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from os import getenv
+from dotenv import load_dotenv
 
-SCOPES = ["https://www.googleapis.com/auth/documents.readonly"]
+from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
 
-DOCUMENT_ID = "195j9eDD3ccgjQRttHhJPymLJUCOUjs-jmwTrekvdjFE"
+from handlers import router
+
+load_dotenv()
 
 
-def main():
-  creds = None
-  token_path = ".config/token.json"
-  credentials_path = ".config/credentials.json"
+dp = Dispatcher(storage=MemoryStorage())
+bot = Bot(token=getenv("TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+dp.include_router(router)
 
-  if os.path.exists(token_path):
-    creds = Credentials.from_authorized_user_file(token_path, SCOPES)
 
-  if not creds or not creds.valid:
-    if creds and creds.expired and creds.refresh_token:
-      creds.refresh(Request())
-    else:
-      flow = InstalledAppFlow.from_client_secrets_file(
-          credentials_path, SCOPES
-      )
-      creds = flow.run_local_server(port=0)
-
-    with open(token_path, "w") as token:
-      token.write(creds.to_json())
-
-  try:
-    service = build("docs", "v1", credentials=creds)
-
-    document = service.documents().get(documentId=DOCUMENT_ID).execute()
-
-    print(f"The title of the document is: {document.get('title')}")
-  except HttpError as err:
-    print(err)
+async def main() -> None:
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == "__main__":
-  main()
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    asyncio.run(main())
